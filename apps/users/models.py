@@ -15,7 +15,7 @@ class UserProfile(AbstractUser):
     birthday = models.DateField(verbose_name=u"生日", null=True, blank=True)
     gender = models.CharField(
         choices=(
-            ('male', u'男'), ("female", u"女")), max_length=5, default='male')
+            ('male', u'男'), ("female", u"女")), max_length=6, default='male')
     address = models.CharField(max_length=100, default=u'')
     phone_num = models.CharField(max_length=11, null=True, blank=True)
     # ImageField instances are created in your database as varchar columns
