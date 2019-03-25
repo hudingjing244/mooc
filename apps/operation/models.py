@@ -21,6 +21,8 @@ class UserAsk(models.Model):
         verbose_name = u"用户咨询"
         verbose_name_plural = verbose_name
 
+    def __unicode__(self):
+        return self.name
 
 class CourseComment(models.Model):
     user = models.ForeignKey(UserProfile, verbose_name=u"用户")
@@ -31,6 +33,9 @@ class CourseComment(models.Model):
     class Meta:
         verbose_name = u"课程评论"
         verbose_name_plural = verbose_name
+
+    def __unicode__(self):
+        return self.comments
 
 
 class UserFavorite(models.Model):
@@ -44,17 +49,23 @@ class UserFavorite(models.Model):
         verbose_name = u"用户收藏"
         verbose_name_plural = verbose_name
 
+    def __unicode__(self):
+        return u"用户收藏"
+
 
 class UserMessage(models.Model):
     # 发消息有两种，定向消息可以用外键绑定用户，但还有一种是群发公告,0代表公告
     user = models.IntegerField(default=0, verbose_name=u"接收用户")
-    messa = models.CharField(max_length=500, verbose_name=u"消息内容")
+    message = models.CharField(max_length=500, verbose_name=u"消息内容")
     has_read = models.BooleanField(default=False, verbose_name=u"是否已读")
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
 
     class Meta:
         verbose_name = u"用户消息"
         verbose_name_plural = verbose_name
+
+    def __unicode__(self):
+        return u"用户消息"
 
 
 class UserCourse(models.Model):
@@ -65,3 +76,6 @@ class UserCourse(models.Model):
     class Meta:
         verbose_name = u"用户课程"
         verbose_name_plural = verbose_name
+
+    def __unicode__(self):
+        return u"用户课程"

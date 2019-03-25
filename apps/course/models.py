@@ -10,7 +10,7 @@ class Course(models.Model):
     name=models.CharField(max_length=50,verbose_name=u"课程名")
     desc=models.CharField(max_length=300,verbose_name=u"课程描述")
     detail=models.TextField(verbose_name=u"课程详情")
-    degree=models.CharField(choices=(("cj","初级"),("zj","中级"),("gj","高级")),max_length=2)
+    degree=models.CharField(verbose_name=u"课程难度",choices=(("cj","初级"),("zj","中级"),("gj","高级")),max_length=2)
     learn_time=models.IntegerField(default=0,verbose_name=u"学习时长（分钟）")
     student_nums=models.IntegerField(default=0,verbose_name=u"学习人数")
     favor_nums=models.IntegerField(default=0,verbose_name=u"收藏人数")
@@ -22,6 +22,9 @@ class Course(models.Model):
         verbose_name=u"课程"
         verbose_name_plural=verbose_name
 
+    def __unicode__(self):
+        return self.name
+
 class Lesson(models.Model):
     course=models.ForeignKey(Course,verbose_name=u"课程")
     name=models.CharField(max_length=100,verbose_name=u"章节")
@@ -30,6 +33,9 @@ class Lesson(models.Model):
     class Meta:
         verbose_name=u"章节"
         verbose_name_plural=verbose_name
+
+    def __unicode__(self):
+        return self.name
 
 
 class Video(models.Model):
@@ -41,6 +47,9 @@ class Video(models.Model):
         verbose_name=u"视频"
         verbose_name_plural=verbose_name
 
+    def __unicode__(self):
+        return self.name
+
 
 class CourseResourse(models.Model):
     course=models.ForeignKey(Course,verbose_name=u"课程")
@@ -51,3 +60,6 @@ class CourseResourse(models.Model):
     class Meta:
         verbose_name=u"课程资源"
         verbose_name_plural=verbose_name
+
+    def __unicode__(self):
+        return self.name
