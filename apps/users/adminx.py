@@ -3,8 +3,22 @@ __author__ = "hudingjing"
 __date__ = '2019/3/25 16:11 '
 
 import xadmin
+from xadmin import views
 
 from .models import EmailVerifyRecord, UserProfile, Banner
+
+class BaseSetting(object):
+    # 开启主题功能
+    enable_themes = True
+    use_bootswatch = True
+
+
+# xadmin 全局配置参数信息设置
+class GlobalSettings(object):
+    site_title = "MOOC后台管理"
+    site_footer = "Tigerouse Corporation"
+    # 收起菜单
+    menu_style = "accordion"
 
 
 # 创建admin的管理类,这里不再是继承admin，而是继承object
@@ -32,3 +46,5 @@ class BannerAdmin(object):
 xadmin.site.register(EmailVerifyRecord, EmailVerifyRecordAdmin)
 # xadmin.site.register(UserProfile, UserProfileAdmin)   xadmin自动注册过了
 xadmin.site.register(Banner, BannerAdmin)
+xadmin.site.register(views.BaseAdminView, BaseSetting)
+xadmin.site.register(views.CommAdminView, GlobalSettings)
