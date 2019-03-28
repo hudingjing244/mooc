@@ -54,18 +54,21 @@ class RegisterView(View):
         if register_form.is_valid():
             #合法的注册记录存至数据库
             user_email = request.POST.get("email", "")
-            pass_word = request.POST.get("password", "")
-            user_profile=UserProfile()
-            user_profile.username=user_email
-            user_profile.email=user_email
-            user_profile.password=make_password(pass_word)
-            user_profile.is_active=False
-            user_profile.save()
+            if UserProfile.objects.filter(email=user_email):
+                return render(request, 'register.html', {"register_form": register_form,"msg": "该邮箱已被注册"})
+            else:
+                pass_word = request.POST.get("password", "")
+                user_profile=UserProfile()
+                user_profile.username=user_email
+                user_profile.email=user_email
+                user_profile.password=make_password(pass_word)
+                user_profile.is_active=False
+                user_profile.save()
 
-            #邮箱激活
-            send_register_email(user_email,'register')
+                #邮箱激活
+                send_register_email(user_email,'register')
 
-            return render(request, 'index.html')
+                return render(request, 'index.html')
 
         else:
             return render(request, 'register.html', {"register_form": register_form})
