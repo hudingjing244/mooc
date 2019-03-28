@@ -40,7 +40,10 @@ def send_register_email(email, send_type='register'):
         email_body = '请点击链接以激活您的账号：http://127.0.0.1:8000/active/{0}'.format(
             random_code)
     elif send_type == 'forget':
-        pass
+        email_subject = '天才靖MOOC网用户密码重置链接'
+        # 需要动态生成一个active/目录
+        email_body = '请点击链接以重置您的密码：http://127.0.0.1:8000/reset_pwd/{0}'.format(
+            random_code)
 
     # 发送邮件
     send_status = send_mail(email_subject, email_body, EMAIL_FROM, [email])
