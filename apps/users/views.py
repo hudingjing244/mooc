@@ -83,4 +83,6 @@ class ActiveView(View):
                 user=UserProfile.objects.get(email=record.email)
                 user.is_active=True
                 user.save()
+        else:
+            return render(request,"active_fail.html")
         return render(request,"login.html")
