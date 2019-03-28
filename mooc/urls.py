@@ -19,7 +19,7 @@ import xadmin
 
 from django.views.generic import TemplateView
 
-from users.views import LoginView,RegisterView
+from users.views import LoginView,RegisterView,ActiveView
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
@@ -27,5 +27,6 @@ urlpatterns = [
     url('^login/$', LoginView.as_view(), name="login"),
     url('^register/$', RegisterView.as_view(), name="register"),
     url(r'^captcha/', include('captcha.urls')),
+    url(r'^active/(?P<active_code>.*)/$', ActiveView.as_view(),name="user_active"),
 
 ]

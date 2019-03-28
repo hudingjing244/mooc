@@ -1,3 +1,4 @@
+# encoding: utf-8
 """
 Django settings for mooc project.
 
@@ -142,3 +143,12 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+# 发送邮件的setting设置
+
+EMAIL_HOST = "smtp.qq.com"
+EMAIL_PORT = 25
+EMAIL_HOST_USER = "532931632@qq.com"
+EMAIL_HOST_PASSWORD = "nwtqkazjttozcbce"
+EMAIL_USE_TLS= False
+EMAIL_FROM = EMAIL_HOST_USER
