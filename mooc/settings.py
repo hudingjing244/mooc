@@ -152,3 +152,6 @@ EMAIL_HOST_USER = "532931632@qq.com"
 EMAIL_HOST_PASSWORD = "nwtqkazjttozcbce"
 EMAIL_USE_TLS= False
 EMAIL_FROM = EMAIL_HOST_USER
+
+MEDIA_URL='/media/'
+MEDIA_ROOT=os.path.join(BASE_DIR,'meida')
