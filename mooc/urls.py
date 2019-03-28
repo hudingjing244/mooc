@@ -20,6 +20,7 @@ import xadmin
 from django.views.generic import TemplateView
 
 from users.views import LoginView,RegisterView,ActiveView,ForgetPwdView,ResetView,ModifyView
+from organization.views import OrgView
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
@@ -31,5 +32,7 @@ urlpatterns = [
     url(r'^forget/$', ForgetPwdView.as_view(), name="forget"),
     url(r'^reset_pwd/(?P<reset_code>.*)/$', ResetView.as_view(), name="reset_pwd"),
     url(r'^modify_pwd/$', ModifyView.as_view(), name="modify_pwd"),
+
+    url(r'^org_list/$', OrgView.as_view(), name="org_list"),
 
 ]
