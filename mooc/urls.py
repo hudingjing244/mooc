@@ -1,3 +1,4 @@
+# encoding: utf-8
 """mooc URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -16,11 +17,12 @@ Including another URLconf
 from django.conf.urls import url,include
 from django.contrib import admin
 import xadmin
-
 from django.views.generic import TemplateView
+from django.views.static import serve
 
 from users.views import LoginView,RegisterView,ActiveView,ForgetPwdView,ResetView,ModifyView
 from organization.views import OrgView
+from mooc.settings import MEDIA_ROOT
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
@@ -34,5 +36,8 @@ urlpatterns = [
     url(r'^modify_pwd/$', ModifyView.as_view(), name="modify_pwd"),
 
     url(r'^org_list/$', OrgView.as_view(), name="org_list"),
+
+    #上传文件的访问处理
+    url(r'^media/(?P<path>.*)/$', serve,{'document_root':MEDIA_ROOT} ,name="media"),
 
 ]
