@@ -156,4 +156,4 @@ EMAIL_USE_TLS= False
 EMAIL_FROM = EMAIL_HOST_USER
 
 MEDIA_URL='/media/'
-MEDIA_ROOT=os.path.join(BASE_DIR,'meida')
+MEDIA_ROOT=os.path.join(BASE_DIR,'media')

@@ -14,6 +14,9 @@ class OrgView(View):
         all_orgs=CourseOrg.objects.all()
         all_citys=CityDict.objects.all()
         orgs_num=all_orgs.count()
+        city_id=request.GET.get("city","")
+        if city_id:
+            all_orgs=all_orgs.filter(city_id=int(city_id))
 
         #对课程机构分页显示
         try:
@@ -27,5 +30,6 @@ class OrgView(View):
         return render(request,"org-list.html",{
             'all_orgs':orgs,
             'all_citys':all_citys,
-            'orgs_num':orgs_num
+            'orgs_num':orgs_num,
+            "city_id":city_id
         })
