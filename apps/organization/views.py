@@ -1,8 +1,10 @@
 # encoding: utf-8
 from django.shortcuts import render
 from django.views.generic.base import View
+from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import CourseOrg,CityDict
+
 
 # Create your views here.
 class OrgView(View):
@@ -12,8 +14,18 @@ class OrgView(View):
         all_orgs=CourseOrg.objects.all()
         all_citys=CityDict.objects.all()
         orgs_num=all_orgs.count()
+
+        #对课程机构分页显示
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_orgs,5, request=request)
+        orgs = p.page(page)
+
         return render(request,"org-list.html",{
-            'all_orgs':all_orgs,
+            'all_orgs':orgs,
             'all_citys':all_citys,
             'orgs_num':orgs_num
         })

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'operation',
     'xadmin',
     'crispy_forms',
+    'pure_pagination',
 ]
 
 AUTH_USER_MODEL='users.UserProfile'
