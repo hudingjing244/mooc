@@ -13,10 +13,14 @@ class OrgView(View):
         #取出所有机构和城市，传到前端动态显示
         all_orgs=CourseOrg.objects.all()
         all_citys=CityDict.objects.all()
-        orgs_num=all_orgs.count()
         city_id=request.GET.get("city","")
+        category=request.GET.get("ct","")
         if city_id:
             all_orgs=all_orgs.filter(city_id=int(city_id))
+        if category:
+            all_orgs=all_orgs.filter(category=int(category))
+            
+        orgs_num=all_orgs.count()
 
         #对课程机构分页显示
         try:
@@ -31,5 +35,6 @@ class OrgView(View):
             'all_orgs':orgs,
             'all_citys':all_citys,
             'orgs_num':orgs_num,
-            "city_id":city_id
+            "city_id":city_id,
+            "category":category
         })
