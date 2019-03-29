@@ -2,8 +2,10 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse
 
 from .models import CourseOrg,CityDict
+from .forms import UserAskForm
 
 
 # Create your views here.
@@ -43,3 +45,15 @@ class OrgView(View):
             "category":category,
             "sortby":sortby
         })
+
+class UserAskView(View):
+    def post(self,request):
+        userask_form=UserAskForm(request.POST)
+        if userask_form.is_valid():
+            #如果表单数据合法，保存至数据库并返回相应的记录对象
+            user_ask=userask_form.save(commit=True)
+            #并且回传AJAX所需要的json数据，用于刷新页面
+            return HttpResponse("{'status':'success'}",content_type="application/json")
+        else:
+            return HttpResponse("{'status': 'fail', 'msg':'添加出错'}",  content_type='application/json')
+
