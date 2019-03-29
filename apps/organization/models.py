@@ -24,6 +24,8 @@ class CourseOrg(models.Model):
     name = models.CharField(max_length=50, verbose_name=u"机构名称")
     category=models.SmallIntegerField(choices=((0,"培训机构"),(1,"高校"),(2,"个人")),default=0,verbose_name="机构类型")
     desc = models.TextField(verbose_name=u"机构描述")
+    students=models.IntegerField(default=0,verbose_name=u"学习人数")
+    course_nums=models.IntegerField(default=0,verbose_name=u"课程数")
     click_nums = models.IntegerField(default=0, verbose_name=u"点击数")
     favor_nums = models.IntegerField(default=0, verbose_name=u"收藏数")
     image = models.ImageField(

@@ -15,11 +15,15 @@ class OrgView(View):
         all_citys=CityDict.objects.all()
         city_id=request.GET.get("city","")
         category=request.GET.get("ct","")
+        sortby=request.GET.get('sortby',"")
         if city_id:
             all_orgs=all_orgs.filter(city_id=int(city_id))
         if category:
             all_orgs=all_orgs.filter(category=int(category))
-            
+        if sortby=='students':
+            all_orgs=all_orgs.order_by('-students')
+        elif sortby=='courses':
+            all_orgs=all_orgs.order_by('-course_nums')
         orgs_num=all_orgs.count()
 
         #对课程机构分页显示
@@ -36,5 +40,6 @@ class OrgView(View):
             'all_citys':all_citys,
             'orgs_num':orgs_num,
             "city_id":city_id,
-            "category":category
+            "category":category,
+            "sortby":sortby
         })
