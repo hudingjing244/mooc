@@ -22,12 +22,17 @@ class Course(models.Model):
     image=models.ImageField(upload_to="course/%Y/%m",verbose_name=u"封面",max_length=100)
     click_nums=models.IntegerField(default=0,verbose_name=u'点击数')
     tag=models.CharField(default='',max_length=10,verbose_name=u"课程标签")
+    need_known=models.CharField(max_length=300,verbose_name=u"课程须知",default='')
+    teacher_tell=models.CharField(max_length=300,verbose_name=u"老师告诉你",default='')
+
     add_time=models.DateTimeField(default=datetime.now,verbose_name=u"添加时间")
 
     def get_chapter_nums(self):
         return self.lesson_set.all().count()
     def get_students(self):
         return self.usercourse_set.all()[:5]
+    def get_chapter(self):
+        return self.lesson_set.all()
 
     class Meta:
         verbose_name=u"课程"
@@ -41,6 +46,9 @@ class Lesson(models.Model):
     name=models.CharField(max_length=100,verbose_name=u"章节")
     add_time=models.DateTimeField(default=datetime.now,verbose_name=u"添加时间")
 
+    def get_videos(self):
+        return self.video_set.all()
+
     class Meta:
         verbose_name=u"章节"
         verbose_name_plural=verbose_name
@@ -52,6 +60,8 @@ class Lesson(models.Model):
 class Video(models.Model):
     lesson=models.ForeignKey(Lesson,verbose_name=u"章节")
     name=models.CharField(max_length=100,verbose_name=u"视频")
+    learn_time=models.IntegerField(default=0,verbose_name=u"学习时长（分钟）")
+    url=models.CharField(max_length=200,verbose_name=u"视频地址",blank=True,null=True)
     add_time=models.DateTimeField(default=datetime.now,verbose_name=u"添加时间")
 
     class Meta:

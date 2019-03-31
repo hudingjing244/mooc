@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 
-from .models import Course
+from .models import Course,CourseResourse
 from operation.models import UserFavorite
 # Create your views here.
 
@@ -64,3 +64,15 @@ class CourseDetailView(View):
             'has_favor_course':has_favor_course,
             'has_favor_org':has_favor_org,
         })
+
+
+class CourseInfoView(View):
+    """课程目录"""
+    def get(self,request,course_id):
+        course=Course.objects.get(id=int(course_id))
+        all_resourses=CourseResourse.objects.filter(course=course_id)
+        return render(request,'course-video.html',{
+            'course':course,
+            'all_resourses':all_resourses,
+        })
+
