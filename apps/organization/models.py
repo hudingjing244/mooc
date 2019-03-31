@@ -36,6 +36,9 @@ class CourseOrg(models.Model):
     city = models.ForeignKey(CityDict, verbose_name=u"所在城市")
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
 
+    def get_teacher_nums(self):
+        return self.teacher_set.all().count()
+
     class Meta:
         verbose_name = u"课程机构"
         verbose_name_plural = verbose_name

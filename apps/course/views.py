@@ -6,6 +6,7 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 
 from .models import Course
+from operation.models import UserFavorite
 # Create your views here.
 
 class CourseListView(View):
@@ -32,4 +33,34 @@ class CourseListView(View):
             'all_courses':courses,
             "sortby":sortby,
             'hot_courses':hot_courses
+        })
+
+class CourseDetailView(View):
+    """
+    课程详情页
+    """
+    def get(self,request,course_id):
+        course=Course.objects.get(id=int(course_id))
+        course.click_nums+=1
+        course.save()
+
+        has_favor_course=False
+        has_favor_org=False
+        if request.user.is_authenticated():
+            if UserFavorite.objects.filter(user=request.user,fav_id=course.id,fav_type=1):
+                has_favor_course=True
+            if UserFavorite.objects.filter(user=request.user,fav_id=course.courseOrg.id,fav_type=2):
+                has_favor_org=True
+
+
+        tag=course.tag
+        if tag:
+            related_courses=Course.objects.filter(tag=tag).exclude(id=int(course_id))[:3]
+        else:
+            related_courses=[]
+        return render(request,'course-detail.html',{
+            'course':course,
+            'related_courses':related_courses,
+            'has_favor_course':has_favor_course,
+            'has_favor_org':has_favor_org,
         })

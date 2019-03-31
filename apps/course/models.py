@@ -10,6 +10,7 @@ from organization.models import CourseOrg,Teacher
 
 class Course(models.Model):
     name=models.CharField(max_length=50,verbose_name=u"课程名")
+    category=models.CharField(max_length=20,verbose_name=u'课程类别',default=u'公开课')
     courseOrg=models.ForeignKey(CourseOrg,verbose_name=u"所属机构",null=True,blank=True)
     teacher=models.ForeignKey(Teacher,verbose_name=u"授课讲师",null=Teacher,blank=True)
     desc=models.CharField(max_length=300,verbose_name=u"课程描述")
@@ -20,7 +21,13 @@ class Course(models.Model):
     favor_nums=models.IntegerField(default=0,verbose_name=u"收藏人数")
     image=models.ImageField(upload_to="course/%Y/%m",verbose_name=u"封面",max_length=100)
     click_nums=models.IntegerField(default=0,verbose_name=u'点击数')
+    tag=models.CharField(default='',max_length=10,verbose_name=u"课程标签")
     add_time=models.DateTimeField(default=datetime.now,verbose_name=u"添加时间")
+
+    def get_chapter_nums(self):
+        return self.lesson_set.all().count()
+    def get_students(self):
+        return self.usercourse_set.all()[:5]
 
     class Meta:
         verbose_name=u"课程"
