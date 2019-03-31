@@ -35,6 +35,8 @@ urlpatterns = [
 
     #机构路由
     url(r'^org/', include('organization.urls',namespace='org')),
+    # 课程路由
+    url(r'^course/', include('course.urls', namespace='course')),
 
     #上传文件的访问处理
     url(r'^media/(?P<path>.*)/$', serve,{'document_root':MEDIA_ROOT} ,name="media"),

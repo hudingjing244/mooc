@@ -24,6 +24,7 @@ class OrgView(View):
             all_orgs = all_orgs.filter(city_id=int(city_id))
         if category:
             all_orgs = all_orgs.filter(category=int(category))
+
         if sortby == 'students':
             all_orgs = all_orgs.order_by('-students')
         elif sortby == 'courses':

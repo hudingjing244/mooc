@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}课程机构列表-天才靖的MOOC小站{% endblock %}
+{% block title %}机构列表-天才靖的MOOC小站{% endblock %}
+{% block bread %}
+    <section>
+        <div class="wp">
+            <ul class="crumbs">
+                <li><a href="/">首页</a>></li>
+                <li>机构</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
 
 {% block content %}
     <section>
@@ -171,16 +181,7 @@
     </section>
 {% endblock %}
 
-{% block bread %}
-    <section>
-        <div class="wp">
-            <ul class="crumbs">
-                <li><a href="/">首页</a>></li>
-                <li>课程机构</li>
-            </ul>
-        </div>
-    </section>
-{% endblock %}
+
 
 {% block comstom_js %}
     <script>
