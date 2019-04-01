@@ -3,7 +3,7 @@ __author__ = "hudingjing"
 __date__ = '2019/3/29 16:28 '
 
 from django.conf.urls import url
-from organization.views import OrgView,UserAskView,OrgHome,OrgCourse,OrgTeacher,OrgDesc,FavorView,TeacherListView
+from organization.views import OrgView,UserAskView,OrgHome,OrgCourse,OrgTeacher,OrgDesc,FavorView,TeacherListView,TeacherDetailView
 
 urlpatterns = [
     # 课程机构列表url
@@ -12,12 +12,16 @@ urlpatterns = [
     url(r'^add_ask/$',UserAskView.as_view(),name='add_ask'),
     # 讲师
     url(r'^teacher/list/$', TeacherListView.as_view(), name="teacher_list"),
+    url(r'^teacher/(?P<org_id>\d+)/$', OrgTeacher.as_view(), name='org_teacher'),
     #课程详情页
     url(r'^home/(?P<org_id>\d+)/$',OrgHome.as_view(),name='org_home'),
     url(r'^course/(?P<org_id>\d+)/$', OrgCourse.as_view(), name='org_course'),
     url(r'^teacher/(?P<org_id>\d+)/$', OrgTeacher.as_view(), name='org_teacher'),
     url(r'^desc/(?P<org_id>\d+)/$', OrgDesc.as_view(), name='org_desc'),
 
+    # 讲师
+    url(r'^teacher/list/$', TeacherListView.as_view(), name="teacher_list"),
+    url(r'^teacher/detail/(?P<teacher_id>\d+)/$', TeacherDetailView.as_view(), name='teacher_detail'),
 
     #用户收藏，包括机构、课程、讲师
     url(r'favor/$', FavorView.as_view(), name="favor"),

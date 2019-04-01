@@ -4,9 +4,10 @@ from django.views.generic.base import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 
-from .models import CourseOrg, CityDict
+from .models import CourseOrg, CityDict,Teacher
 from operation.models import UserFavorite
 from .forms import UserAskForm
+from course.models import Course
 
 
 # Create your views here.
@@ -19,6 +20,7 @@ class OrgView(View):
         all_citys = CityDict.objects.all()
         city_id = request.GET.get("city", "")
         category = request.GET.get("ct", "")
+
         sortby = request.GET.get('sortby', "")
         if city_id:
             all_orgs = all_orgs.filter(city_id=int(city_id))
@@ -182,7 +184,50 @@ class FavorView(View):
 
 class TeacherListView(View):
     def get(self,request):
-        return render(request,'teachers-list.html',{})
+        all_teachers=Teacher.objects.all()
 
+        sort = request.GET.get('sort', "")
+        if sort == 'hot':
+            all_teachers = all_teachers.order_by('-click_nums')
+
+
+        rank_teachers=Teacher.objects.all().order_by('-click_nums')[:3]
+
+        # 对讲师列表分页显示
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_teachers, 1, request=request)
+        teachers = p.page(page)
+
+        return render(request,'teachers-list.html',{
+            'all_teachers':teachers,
+            'rank_teachers':rank_teachers,
+        })
+
+
+class TeacherDetailView(View):
+    def get(self,request,teacher_id):
+        teacher=Teacher.objects.get(id=int(teacher_id))
+        all_courses=Course.objects.filter(teacher=teacher)
+
+        rank_teachers=Teacher.objects.all().order_by('-click_nums')[:3]
+
+        has_fav_teacher = False
+        if UserFavorite.objects.filter(user=request.user, fav_type=3, fav_id=teacher.id):
+            has_fav_teacher = True
+        has_fav_org = False
+        if UserFavorite.objects.filter(user=request.user, fav_type=2, fav_id=teacher.org.id):
+            has_fav_org = True
+
+        return render(request,"teacher-detail.html",{
+            'teacher':teacher,
+            'all_courses':all_courses,
+            'rank_teachers':rank_teachers,
+            'has_fav_teacher':has_fav_teacher,
+            'has_fav_org':has_fav_org,
+        })
 
 
