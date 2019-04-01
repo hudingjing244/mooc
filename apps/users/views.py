@@ -9,6 +9,7 @@ from django.contrib.auth.hashers import make_password
 from .models import UserProfile,EmailVerifyRecord
 from .forms import LoginForm,RegisterForm,ForgetForm,RestPwdForm
 from utils.email_send import send_register_email
+from utils.minin_utils import LoginRequiredMinin
 
 class CustomerBackend(ModelBackend):
     def authenticate(self, username=None, password=None, **kwargs):
@@ -130,5 +131,8 @@ class ModifyView(View):
 
 
 
-
+class UserCenterView(LoginRequiredMinin,View):
+    """用户中心"""
+    def get(self,request):
+        return render(request,'usercenter-info.html',{})
 

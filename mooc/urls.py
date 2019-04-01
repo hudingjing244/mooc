@@ -14,12 +14,12 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url,include
+from django.conf.urls import url, include
 import xadmin
 from django.views.generic import TemplateView
 from django.views.static import serve
 
-from users.views import LoginView,RegisterView,ActiveView,ForgetPwdView,ResetView,ModifyView
+from users.views import LoginView, RegisterView, ActiveView, ForgetPwdView, ResetView, ModifyView
 from mooc.settings import MEDIA_ROOT
 
 urlpatterns = [
@@ -28,16 +28,21 @@ urlpatterns = [
     url('^login/$', LoginView.as_view(), name="login"),
     url('^register/$', RegisterView.as_view(), name="register"),
     url(r'^captcha/', include('captcha.urls')),
-    url(r'^active/(?P<active_code>.*)/$', ActiveView.as_view(),name="user_active"),
+    url(r'^active/(?P<active_code>.*)/$',
+        ActiveView.as_view(), name="user_active"),
     url(r'^forget/$', ForgetPwdView.as_view(), name="forget"),
-    url(r'^reset_pwd/(?P<reset_code>.*)/$', ResetView.as_view(), name="reset_pwd"),
+    url(r'^reset_pwd/(?P<reset_code>.*)/$',
+        ResetView.as_view(), name="reset_pwd"),
     url(r'^modify_pwd/$', ModifyView.as_view(), name="modify_pwd"),
 
-    #机构路由
-    url(r'^org/', include('organization.urls',namespace='org')),
+    # 机构路由
+    url(r'^org/', include('organization.urls', namespace='org')),
     # 课程路由
     url(r'^course/', include('course.urls', namespace='course')),
-    #上传文件的访问处理
-    url(r'^media/(?P<path>.*)/$', serve,{'document_root':MEDIA_ROOT} ,name="media"),
+    # 用户路由
+    url(r'^users/', include('users.urls', namespace='users')),
+    # 上传文件的访问处理
+    url(r'^media/(?P<path>.*)/$', serve,
+        {'document_root': MEDIA_ROOT}, name="media"),
 
 ]
