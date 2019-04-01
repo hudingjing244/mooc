@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from django.http import HttpResponse
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 
 
 from .models import Course,CourseResourse
@@ -14,6 +15,10 @@ class CourseListView(View):
     def get(self,request):
         all_courses=Course.objects.all().order_by('-add_time')#默认按时间排序
         hot_courses=all_courses.order_by('-click_nums')[:3]
+        #全局课程搜索
+        search_keywords=request.GET.get('keywords','')
+        if search_keywords:
+            all_courses=all_courses.filter(Q(name__icontains=search_keywords)|Q(desc__icontains=search_keywords)|Q(detail__icontains=search_keywords))#i 不区分大小写
         #课程排序
         sortby = request.GET.get('sortby', "")
         if sortby == 'student_nums':
