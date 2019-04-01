@@ -6,7 +6,7 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 
 from .models import Course,CourseResourse
-from operation.models import UserFavorite
+from operation.models import UserFavorite,CourseComment
 # Create your views here.
 
 class CourseListView(View):
@@ -76,3 +76,34 @@ class CourseInfoView(View):
             'all_resourses':all_resourses,
         })
 
+class CourseCommentView(View):
+    """课程评论"""
+    def get(self,request,course_id):
+        course=Course.objects.get(id=int(course_id))
+        all_resourses=CourseResourse.objects.filter(course=int(course_id))
+        all_comments=CourseComment.objects.filter(course=int(course_id))
+        return render(request,'course-comment.html',{
+            'course':course,
+            'all_resourses':all_resourses,
+            'all_comments':all_comments,
+        })
+
+class AddCommentView(View):
+    def post(self,request):
+        if not request.user.is_authenticated:
+            #用户未登录时返回给前台ajax的json数据
+            return HttpResponse(
+                "{'status': 'fail', 'msg':'用户未登录'}",
+                content_type='application/json')
+        course_id=request.POST.get('course_id','0')
+        comment=request.POST.get('comments','')
+        if course_id>'0' and comment:
+            course_comment=CourseComment(course=Course.objects.get(id=int(course_id)),comments=comment,user=request.user)
+            course_comment.save()
+            return HttpResponse(
+                "{'status': 'success', 'msg':'评论成功'}",
+                content_type='application/json')
+        else:
+            return HttpResponse(
+                "{'status': 'fail', 'msg':'评论失败'}",
+                content_type='application/json')
