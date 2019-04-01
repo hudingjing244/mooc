@@ -6,7 +6,8 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 
 from .models import Course,CourseResourse
-from operation.models import UserFavorite,CourseComment
+from utils.minin_utils import LoginRequiredMinin
+from operation.models import UserFavorite,CourseComment,UserCourse
 # Create your views here.
 
 class CourseListView(View):
@@ -66,26 +67,51 @@ class CourseDetailView(View):
         })
 
 
-class CourseInfoView(View):
+class CourseInfoView(LoginRequiredMinin,View):
     """课程目录"""
     def get(self,request,course_id):
         course=Course.objects.get(id=int(course_id))
+
+        #将学生和课程关联起来
+        user_courses=UserCourse.objects.filter(user=request.user,course=course)
+        if not user_courses:
+            user_course=UserCourse(user=request.user,course=course)
+            user_course.save()
+
+        #学过改课的学生学过的其他课程
+        user_courses=UserCourse.objects.filter(course=course)
+        user_ids=[user_course.user.id for user_course in user_courses]
+        all_user_courses=UserCourse.objects.filter(user_id__in=user_ids)
+        course_ids = [all_user_course.course_id for all_user_course in all_user_courses]
+        relate_courses=Course.objects.filter(id__in=course_ids).exclude(id=course_id).order_by('-click_nums')[:5]
+
+        #额外资源
         all_resourses=CourseResourse.objects.filter(course=course_id)
+
         return render(request,'course-video.html',{
             'course':course,
             'all_resourses':all_resourses,
+            'relate_courses':relate_courses
         })
 
-class CourseCommentView(View):
+class CourseCommentView(LoginRequiredMinin,View):#主要继承顺序
     """课程评论"""
     def get(self,request,course_id):
         course=Course.objects.get(id=int(course_id))
+        #学过改课的学生学过的其他课程
+        user_courses=UserCourse.objects.filter(course=course)
+        user_ids=[user_course.user.id for user_course in user_courses]
+        all_user_courses=UserCourse.objects.filter(user_id__in=user_ids)
+        course_ids = [all_user_course.course_id for all_user_course in all_user_courses]
+        relate_courses=Course.objects.filter(id__in=course_ids).exclude(id=course_id).order_by('-click_nums')[:5]
+
         all_resourses=CourseResourse.objects.filter(course=int(course_id))
         all_comments=CourseComment.objects.filter(course=int(course_id))
         return render(request,'course-comment.html',{
             'course':course,
             'all_resourses':all_resourses,
             'all_comments':all_comments,
+            'relate_courses': relate_courses
         })
 
 class AddCommentView(View):
