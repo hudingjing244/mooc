@@ -180,7 +180,9 @@ class FavorView(View):
                     "{'status': 'fail', 'msg':'收藏出错'}",
                     content_type='application/json')
 
-
+class TeacherListView(View):
+    def get(self,request):
+        return render(request,'teachers-list.html',{})
 
 
 
