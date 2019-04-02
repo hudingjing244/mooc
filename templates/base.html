@@ -19,19 +19,54 @@
 <section class="headerwrap ">
     <header>
 		<div  class=" header">
- 			<div class="top">
+            <!--template语法中函数不带括号，其次request自动传进模板中，不需要在dict中显式的传进来-->
+            {% if request.user.is_authenticated %}
+                <div class="top">
 				<div class="wp">
 					<div class="fl"><p>服务电话：<b>33333333</b></p></div>
-					<!--登录后跳转-->
 
-                        
-                        <a style="color:white" class="fr registerbtn" href="register.html">注册</a>
-                        <a style="color:white" class="fr loginbtn" href="login.html">登录</a>
-                    
+						<div class="personal">
+                            <dl class="user fr">
+                                <dd>{{ request.user.nick_name }}<img class="down fr" src="/static/images/top_down.png"/></dd>
+                                <dt><img width="20" height="20" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
+                            </dl>
+                            <div class="userdetail">
+                            	<dl>
+	                                <dt><img width="80" height="80" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
+	                                <dd>
+	                                    <h2>{{ request.user.nick_name }}</h2>
+	                                    <p>{{ request.user.username }}</p>
+	                                </dd>
+                                </dl>
+                                <div class="btn">
+	                                <a class="personcenter fl" href="{% url 'users:center' %}">进入个人中心</a>
+	                                <a class="fr" href="/logout/">退出</a>
+                                </div>
+                            </div>
+                        </div>
+
 
 
 				</div>
 			</div>
+                {% else %}
+                <div class="top">
+				<div class="wp">
+					<div class="fl"><p>服务电话：<b>12345678910</b></p></div>
+					<!--登录后跳转-->
+
+
+                         <a style="color:white" class="fr registerbtn" href="/register/">注册</a>
+                         <a style="color:white" class="fr loginbtn" href="/login/">登录</a>
+
+
+
+
+
+				</div>
+			</div>
+            {% endif %}
+
 
             <div class="middle">
                 <div class="wp">
@@ -39,7 +74,7 @@
                     <div class="searchbox fr">
                         <div class="selectContainer fl">
                             <span class="selectOption" id="jsSelectOption" data-value="course">
-                                公开课
+                                课程
                             </span>
                             <ul class="selectMenu" id="jsSelectMenu">
                                 <li data-value="course">公开课</li>

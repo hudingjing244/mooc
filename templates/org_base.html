@@ -17,22 +17,98 @@
 </head>
 <body>
 <section class="headerwrap headerwrap2">
-    <header>
-        <div class="header2 header">
+      <header>
+		<div  class=" header">
+            <!--template语法中函数不带括号，其次request自动传进模板中，不需要在dict中显式的传进来-->
+            {% if request.user.is_authenticated %}
+                <div class="top">
+				<div class="wp">
+					<div class="fl"><p>服务电话：<b>33333333</b></p></div>
 
-            <div class="top">
+						<div class="personal">
+                            <dl class="user fr">
+                                <dd>{{ request.user.nick_name }}<img class="down fr" src="/static/images/top_down.png"/></dd>
+                                <dt><img width="20" height="20" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
+                            </dl>
+                            <div class="userdetail">
+                            	<dl>
+	                                <dt><img width="80" height="80" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
+	                                <dd>
+	                                    <h2>{{ request.user.nick_name }}</h2>
+	                                    <p>{{ request.user.username }}</p>
+	                                </dd>
+                                </dl>
+                                <div class="btn">
+	                                <a class="personcenter fl" href="{% url 'users:center' %}">进入个人中心</a>
+	                                <a class="fr" href="/logout/">退出</a>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+				</div>
+			</div>
+                {% else %}
+                <div class="top">
+				<div class="wp">
+					<div class="fl"><p>服务电话：<b>12345678910</b></p></div>
+					<!--登录后跳转-->
+
+
+                         <a style="color:white" class="fr registerbtn" href="/register/">注册</a>
+                         <a style="color:white" class="fr loginbtn" href="/login/">登录</a>
+
+
+
+
+
+				</div>
+			</div>
+            {% endif %}
+
+
+            <div class="middle">
                 <div class="wp">
-                    <div class="fl">
-                        <p>联系方式：<b>3333333333</b></p>
+                    <a href="index.html"><img class="fl" src="/static/images/logo.jpg"/></a>
+                    <div class="searchbox fr">
+                        <div class="selectContainer fl">
+                            <span class="selectOption" id="jsSelectOption" data-value="course">
+                                课程
+                            </span>
+                            <ul class="selectMenu" id="jsSelectMenu">
+                                <li data-value="course">公开课</li>
+                                <li data-value="org">课程机构</li>
+                                <li data-value="teacher">授课老师</li>
+                            </ul>
+                        </div>
+                        <input id="search_keywords" class="fl" type="text" value="" placeholder="请输入搜索内容"/>
+                        <img class="search_btn fr" id="jsSearchBtn" src="/static/images/search_btn.png"/>
                     </div>
-                    <a style="color:white" class="fr registerbtn" href="register.html">注册</a>
-                    <a style="color:white" class="fr loginbtn" href="login.html">登录</a>
                 </div>
             </div>
 
-            {% block top %}
-            {% endblock %}
-        </div>
+
+			<nav>
+				<div class="nav">
+					<div class="wp">
+						<ul>
+							<li class="{% ifequal request.path '/' %}active{% endifequal %}" ><a href="">首页</a></li>
+							<li {% ifequal request.path|slice:":7" '/course'%}active{% endifequal %}>
+								<a href="{% url 'course:course_list' %}">
+									课程<img class="hot" src="/static/images/nav_hot.png">
+								</a>
+							</li>
+							<li {% ifequal request.path|slice:":12" '/org/teacher' %}active{% endifequal %}>
+								<a href="{% url 'org:teacher_list' %}">授课教师</a>
+							</li>
+							<li {% ifequal request.path|slice:":9" '/org/list' %}active{% endifequal %}><a href="{% url 'org:org_list' %}">授课机构</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+
+			</div>
     </header>
 </section>
 <section>

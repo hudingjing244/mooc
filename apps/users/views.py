@@ -1,4 +1,6 @@
 # encoding: utf-8
+import json
+
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.backends import ModelBackend
@@ -173,4 +175,28 @@ class UploadImageView(LoginRequiredMinin, View):
         else:
             return HttpResponse(
                 "{'status':'fail'}",
+                content_type='application/json')
+
+class UpdatePwdView(LoginRequiredMinin,View):
+    """
+    个人中心修改密码
+    """
+    def post(self, request):
+        reset_form = RestPwdForm(request.POST)
+        if reset_form.is_valid():
+            pwd1 = request.POST.get("password1", "")
+            pwd2 = request.POST.get("password2", "")
+            if pwd1 != pwd2:
+                return HttpResponse(
+                    "{'status':'fail','msg':'密码不一致'}",
+                    content_type='application/json')
+            user = request.user
+            user.password = make_password(pwd1)
+            user.save()
+            return HttpResponse(
+                "{'status':'success','msg':'密码修改成功'}",
+                content_type='application/json')
+        else:
+            return HttpResponse(
+                json.dumps(reset_form.errors),
                 content_type='application/json')
