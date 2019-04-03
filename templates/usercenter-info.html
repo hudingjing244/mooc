@@ -46,15 +46,15 @@
                             <i class="error-tips"></i>
                         </li>
                         <li>生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日：
-                            <input type="text" id="birth_day" name="birth_day" value="{{ request.user.birthday }}"
+                            <input type="text" id="birth_day" name="birthday" value="{{ request.user.birthday }}"
                                    readonly="readonly"/>
                             <i class="error-tips"></i>
                         </li>
                         <li>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：
                             <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" value="male"
-                                                                        checked="{% ifequal request.user.gender 'male' %}checked{% endifequal %}">男</label>
+                                                                       {% ifequal request.user.gender 'male' %}checked{% endifequal %}>男</label>
                             <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" value="female"
-                                                                              checked="{% ifequal request.user.gender 'female' %}checked{% endifequal %}">女</label>
+                                                                             {% ifequal request.user.gender 'female' %}checked{% endifequal %}>女</label>
                         </li>
                         <li class="p_infor_city">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址：
                             <input type="text" name="address" id="address" placeholder="请输入你的地址"
@@ -62,8 +62,8 @@
                             <i class="error-tips"></i>
                         </li>
                         <li>手&nbsp;&nbsp;机&nbsp;&nbsp;号：
-                            <input type="text" name="mobile" id="mobile" placeholder="请输入你的手机号码"
-                                   value="{{ request.user.phone_num }}" maxlength="10">
+                            <input type="text" name="phone_num" id="mobile" placeholder="请输入你的手机号码"
+                                   value="{{ request.user.phone_num }}" maxlength="11">
                         </li>
                         <li>邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：
                             <input class="borderno" type="text" name="email" readonly="readonly"
@@ -74,7 +74,7 @@
                             <input type="button" id="jsEditUserBtn" value="保存">
                         </li>
                     </ul>
-                    <input type='hidden' name='csrfmiddlewaretoken' value='799Y6iPeEDNSGvrTu3noBrO4MBLv6enY'/>
+                {% csrf_token %}
                 </form>
             </div>
         </div>

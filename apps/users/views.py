@@ -10,7 +10,7 @@ from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse
 
 from .models import UserProfile, EmailVerifyRecord
-from .forms import LoginForm, RegisterForm, ForgetForm, RestPwdForm, UploadImageForm
+from .forms import LoginForm, RegisterForm, ForgetForm, RestPwdForm, UploadImageForm,UserInfoForm
 from utils.email_send import send_register_email
 from utils.minin_utils import LoginRequiredMinin
 
@@ -159,6 +159,15 @@ class UserCenterView(LoginRequiredMinin, View):
 
     def get(self, request):
         return render(request, 'usercenter-info.html', {})
+    def post(self,request):
+        # 用户个人信息修改表单，注意如果是修改，ModelForm要指定实例对象，否则会新增一个实例，那就不是修改了
+        user_info_form=UserInfoForm(request.POST,instance=request.user)
+        if user_info_form.is_valid():
+            user_info_form.save()
+            return HttpResponse("{'status':'success'}",content_type="application/json")
+        else:
+            return HttpResponse(json.dumps(user_info_form.errors),content_type="application/json")
+
 
 
 class UploadImageView(LoginRequiredMinin, View):
@@ -200,3 +209,44 @@ class UpdatePwdView(LoginRequiredMinin,View):
             return HttpResponse(
                 json.dumps(reset_form.errors),
                 content_type='application/json')
+
+class SendEmailVerifyCodeView(LoginRequiredMinin,View):
+    """
+    发送邮箱验证码
+    """
+    def get(self,request):
+        email=request.GET.get('email',"")
+
+        if UserProfile.objects.filter(email=email):
+            return HttpResponse(
+                "{'status':'fail','email':'该邮箱已经被注册'}",
+                content_type='application/json')
+
+        send_register_email(email,'change')
+
+        return HttpResponse(
+            "{'status':'success','email':'发送成功'}",
+            content_type='application/json')
+
+class ChangeEmailView(LoginRequiredMinin,View):
+    """
+    修改绑定邮箱
+    """
+    def post(self,requset):
+        email=requset.POST.get('email','')
+        code=requset.POST.get('code','')
+
+        if EmailVerifyRecord.objects.filter(email=email,verify_code=code,send_type='change'):
+            user=requset.user
+            user.email=email
+            user.save()
+            return HttpResponse(
+                "{'status':'success','email':'修改成功'}",
+                content_type='application/json')
+        else:
+            return HttpResponse(
+                "{'status':'fail','email':'验证码出错'}",
+                content_type='application/json')
+
+
+

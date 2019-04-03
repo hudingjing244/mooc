@@ -24,7 +24,10 @@ def generate_random_code(random_lenth=8):
 
 def send_register_email(email, send_type='register'):
     # 先在数据库存储一条邮件验证的记录，用于用户点击链接后进行验证
-    random_code = generate_random_code(16)
+    if send_type == 'change':
+        random_code = generate_random_code(4)
+    else:
+        random_code = generate_random_code(16)
     email_record = EmailVerifyRecord()
     email_record.email = email
     email_record.verify_code = random_code
@@ -43,6 +46,11 @@ def send_register_email(email, send_type='register'):
         email_subject = '天才靖MOOC网用户密码重置链接'
         # 需要动态生成一个active/目录
         email_body = '请点击链接以重置您的密码：http://127.0.0.1:8000/reset_pwd/{0}'.format(
+            random_code)
+    elif send_type == 'change':
+        email_subject = '天才靖MOOC网用户邮箱修改验证码'
+        # 需要动态生成一个active/目录
+        email_body = '您的验证码为：{0}'.format(
             random_code)
 
     # 发送邮件

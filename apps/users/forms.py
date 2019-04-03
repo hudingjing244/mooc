@@ -31,4 +31,9 @@ class UploadImageForm(forms.ModelForm):
         model=UserProfile
         fields=['image']
 
+class UserInfoForm(forms.ModelForm):
+    class Meta:
+        model=UserProfile
+        #再次注意，前端form表单中的name字段必须和数据库中的field对应
+        fields=['nick_name','birthday','gender','phone_num','address']
 
