@@ -64,6 +64,9 @@ class Teacher(models.Model):
     favor_nums = models.IntegerField(default=0, verbose_name=u"收藏数")
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
 
+    def get_course_nums(self):
+        return self.course_set.all().count()
+
     class Meta:
         verbose_name = u"教师"
         verbose_name_plural = verbose_name

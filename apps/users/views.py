@@ -13,7 +13,9 @@ from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetForm, RestPwdForm, UploadImageForm,UserInfoForm
 from utils.email_send import send_register_email
 from utils.minin_utils import LoginRequiredMinin
-from operation.models import UserCourse
+from operation.models import UserCourse,UserFavorite
+from organization.models import CourseOrg,Teacher
+from course.models import Course
 
 
 class CustomerBackend(ModelBackend):
@@ -255,6 +257,45 @@ class MyCourseView(LoginRequiredMinin,View):
         all_courses=UserCourse.objects.filter(user=request.user)
         return render(request,"usercenter-mycourse.html",{
             'all_courses':all_courses,
+        })
+
+#写完发现，其实这几个收藏完全可以用一个url一个view处理，请求url中带上一个区分类别的参数就好了
+class MyFavOrgView(LoginRequiredMinin,View):
+    """我的收藏机构页面"""
+    def get(self,request):
+        org_list=[]
+        fav_orgs=UserFavorite.objects.filter(user=request.user,fav_type=2)
+        for fav_org in fav_orgs:
+            org_id=fav_org.fav_id
+            org_list.append(CourseOrg.objects.get(id=org_id))
+        return render(request,"usercenter-fav-org.html",{
+            'org_list':org_list,
+        })
+
+
+class MyFavTeacherView(LoginRequiredMinin,View):
+    """我的收藏讲师页面"""
+    def get(self,request):
+        teacher_list=[]
+        fav_teachers=UserFavorite.objects.filter(user=request.user,fav_type=3)
+        for fav_teacher in fav_teachers:
+            teacher_id=fav_teacher.fav_id
+            teacher_list.append(Teacher.objects.get(id=teacher_id))
+        return render(request,"usercenter-fav-teacher.html",{
+            'teacher_list':teacher_list,
+        })
+
+
+class MyFavCourseView(LoginRequiredMinin,View):
+    """我的收藏课程页面"""
+    def get(self,request):
+        course_list=[]
+        fav_courses=UserFavorite.objects.filter(user=request.user,fav_type=1)
+        for fav_course in fav_courses:
+            course_id=fav_course.fav_id
+            course_list.append(Course.objects.get(id=course_id))
+        return render(request,"usercenter-fav-course.html",{
+            'course_list':course_list,
         })
 
 

@@ -40,6 +40,7 @@ class CourseComment(models.Model):
 
 class UserFavorite(models.Model):
     user = models.ForeignKey(UserProfile, verbose_name=u"用户")
+    #其实也可以每个类型给一个外键
     fav_id = models.IntegerField(default=0, verbose_name=u"数据id")
     fav_type = models.SmallIntegerField(default=1, choices=(
         (1, "课程"), (2, "机构"), (3, "讲师")), verbose_name=u"收藏类型")

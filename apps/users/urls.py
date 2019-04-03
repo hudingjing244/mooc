@@ -4,7 +4,8 @@ __date__ = '2019/4/2 0:09 '
 
 from django.conf.urls import url
 
-from users.views import UserCenterView,UploadImageView,UpdatePwdView,SendEmailVerifyCodeView,ChangeEmailView,MyCourseView
+from users.views import UserCenterView,UploadImageView,UpdatePwdView,SendEmailVerifyCodeView,ChangeEmailView
+from users.views import MyFavTeacherView,MyFavCourseView,MyCourseView,MyFavOrgView
 
 urlpatterns=[
     #用户个人信息中心
@@ -20,4 +21,10 @@ urlpatterns=[
     url(r"^update_email/$", ChangeEmailView.as_view(), name='change_email'),
     # 用户个人中心我的课程
     url(r"^mycourse/$", MyCourseView.as_view(), name='mycourse'),
+    # 用户个人中心我的收藏机构
+    url(r"^myfav/org/$", MyFavOrgView.as_view(), name='myfav_org'),
+    # 用户个人中心我的收藏讲师
+    url(r"^myfav/teacher/$", MyFavTeacherView.as_view(), name='myfav_teacher'),
+    # 用户个人中心我的收藏课程
+    url(r"^myfav/course/$", MyFavCourseView.as_view(), name='myfav_course'),
 ]
