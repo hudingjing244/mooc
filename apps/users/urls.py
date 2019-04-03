@@ -4,7 +4,7 @@ __date__ = '2019/4/2 0:09 '
 
 from django.conf.urls import url
 
-from users.views import UserCenterView,UploadImageView,UpdatePwdView,SendEmailVerifyCodeView,ChangeEmailView
+from users.views import UserCenterView,UploadImageView,UpdatePwdView,SendEmailVerifyCodeView,ChangeEmailView,MyCourseView
 
 urlpatterns=[
     #用户个人信息中心
@@ -18,4 +18,6 @@ urlpatterns=[
     url(r"^sendemail_code/$", SendEmailVerifyCodeView.as_view(), name='send_email_verifyCode'),
     # 用户个人中心修改邮箱
     url(r"^update_email/$", ChangeEmailView.as_view(), name='change_email'),
+    # 用户个人中心我的课程
+    url(r"^mycourse/$", MyCourseView.as_view(), name='mycourse'),
 ]

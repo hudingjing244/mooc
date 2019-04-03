@@ -13,6 +13,7 @@ from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetForm, RestPwdForm, UploadImageForm,UserInfoForm
 from utils.email_send import send_register_email
 from utils.minin_utils import LoginRequiredMinin
+from operation.models import UserCourse
 
 
 class CustomerBackend(ModelBackend):
@@ -247,6 +248,14 @@ class ChangeEmailView(LoginRequiredMinin,View):
             return HttpResponse(
                 "{'status':'fail','email':'验证码出错'}",
                 content_type='application/json')
+
+class MyCourseView(LoginRequiredMinin,View):
+    """我的课程页面"""
+    def get(self,request):
+        all_courses=UserCourse.objects.filter(user=request.user)
+        return render(request,"usercenter-mycourse.html",{
+            'all_courses':all_courses,
+        })
 
 
 
